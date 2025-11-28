@@ -86,6 +86,79 @@ At this stage, note that the nginx web server is configured for internal access 
 To expose it to end users, additional networking and service configurations are required.
 
 
+# Pod Operations
+
+
+**Creating a Pod**
+
+To create a pod named "nginx" using the Docker image "nginx" (pulled from Docker Hub), run the following command:
+
+     kubectl run nginx --image=nginx
+
+
+Once this command executes, Kubernetes creates the pod. You can verify its creation and status by checking the list of pods:
+
+    # kubectl run nginx --image=nginx
+      pod/nginx created
+
+
+    # kubectl get pods
+      NAME    READY   STATUS    RESTARTS   AGE
+      nginx   1/1     Running   0          3s
+
+The output confirms that the pod is running. The "READY" column indicates how many containers are in a ready state, 
+"RESTARTS" shows the number of times the container has restarted, and "AGE" reflects how long the pod has been active.
+
+**Inspecting Pod Details**
+
+For more in-depth information about the pod—including its labels, node assignment, internal IP address, and container specifics—use the kubectl describe command:
+    
+      # kubectl describe pod nginx
+       Name:           nginx
+       Namespace:      default
+       Priority:       0
+       Node:           minikube/192.168.99.100
+      Start Time:     Sat, 11 Jul 2020 00:49:39 -0400
+      Labels:         run=nginx
+      Annotations:    <none>
+      Status:         Running
+      IP:             172.17.0.3
+       IPs:
+           IP: 172.17.0.3
+      Containers:
+         nginx:
+         Container ID:   docker://987785b312ad2e38c77132300f8709b8a027566462c2d18634ff13b34
+         Image:          nginx
+         Image ID:       docker-pullable://nginx@sha256:a23a9056789b968a186c5205f4
+
+
+
+This command output provides essential metadata and status details such as the pod's start time, the node it is running on, and its internal IP address (172.17.0.3). If multiple containers were running within the pod, each would be listed under the "Containers" section.
+
+
+**Viewing Pod Information in Wide Format**
+
+For a summary that also includes node and internal IP details, use the following command:
+
+**kubectl get pods -o wide**
+
+The output will resemble:
+
+
+     NAME    READY   STATUS    RESTARTS   AGE     IP            NODE        NOMINATED NODE
+     nginx   1/1     Running   0          2m28s   172.17.0.3    minikube    <none>
+
+
+Here, each pod is assigned its own internal IP address (in this case, 172.17.0.3), which enables network communications within the cluster.
+
+
+
+
+
+
+
+
+
 
 **Conclusion**
 

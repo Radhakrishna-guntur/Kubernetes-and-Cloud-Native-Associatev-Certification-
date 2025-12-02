@@ -159,6 +159,92 @@ This command creates the pod named myapp-pod, which will be scheduled on node-1 
 
 **Note:** Ensure that your node labels are kept up-to-date as your cluster evolves. This helps maintain consistent and predictable pod scheduling.
 
-L**imitations of Node Selectors**
+**Limitations of Node Selectors**
 
 While node selectors are a simple and effective method for basic pod scheduling, they come with limitations. If your scheduling requirements extend beyond a single label match—for instance, if you need to schedule pods on either a large or medium node or exclude nodes labeled as small—node selectors alone won't suffice. For more complex scheduling scenarios, consider using node affinity or anti-affinity. However, for straightforward cases, node selectors provide an easy-to-use solution.
+
+
+# Node Affinity
+Welcome to this comprehensive guide on node affinity in Kubernetes. Node affinity allows you to control the placement of your pods by specifying rules about which nodes are eligible for scheduling. While traditional node selectors provided basic control, node affinity offers advanced scheduling features with flexible operators and expressions.
+
+<img width="698" height="607" alt="Screenshot 2025-12-02 at 10 32 00 AM" src="https://github.com/user-attachments/assets/17cfc4ff-6790-44d3-ad76-136972dc2404" />
+
+
+## Understanding the Configuration**
+
+**In this configuration:**
+
+    The affinity block is defined under the pod spec.
+    nodeAffinity specifies the criteria used for node scheduling.
+    The field requiredDuringSchedulingIgnoredDuringExecution indicates a mandatory requirement for scheduling; if no node meets the   criteria, the pod is not scheduled.
+    nodeSelectorTerms holds an array of conditions—in this case, ensuring that the node label size must have a value included in the  specified list.
+
+**Behavior and Lifecycle of Node Affinity**
+
+When a pod is created, the Kubernetes scheduler evaluates its node affinity rules to determine the node on which to schedule the pod. However, several scenarios can occur if node conditions change over time.
+
+**Node Affinity Types**
+There are two primary types of node affinity currently supported:
+
+**requiredDuringSchedulingIgnoredDuringExecution:**
+The scheduler enforces that the pod be placed on a node that satisfies the affinity rules. If no matching node is available, the pod remains unscheduled. Once the pod is running, changes to node labels do not impact the running pod.
+
+**preferredDuringSchedulingIgnoredDuringExecution:**
+The scheduler attempts to honor the specified node affinity rules. If a matching node is not found, the pod can be scheduled on a non-matching node. Similarly, node label changes after scheduling are ignored.
+
+## Scheduling vs. Execution
+Node affinity rules are applied during two key phases of a pod's lifecycle:
+
+**1.During Scheduling:**
+At the time of pod creation, the scheduler evaluates the node affinity rules to determine an appropriate node. If using the required type and no matching node is found (for example, if a node is missing the expected label "Large"), the pod will not be scheduled.
+
+**2.During Execution:**
+Once the pod is running, changes in node labels are typically ignored for the current affinity types ("ignored during execution"). However, with forthcoming execution-enforced rules, pods might be evicted if the node subsequently fails to meet the affinity criteria.
+
+**Consider this scenario:**
+A pod is scheduled on a node with the label size=Large. If an administrator later removes this label, the pod continues to run under the current behavior. Future implementations with the "required during execution" option could result in pod eviction.
+
+**Conclusion**
+
+In this guide, we broke down the core components of node affinity and demonstrated how various operators and affinity types influence pod scheduling and execution in Kubernetes. Understanding and leveraging these advanced scheduling capabilities allows you to optimize node usage and ensure that pods are placed on nodes that best meet your application requirements.
+
+
+# Taints and Tolerations vs Node Affinity
+Welcome to this lesson. In this guide, we explore how taints and tolerations work alongside node affinity to control pod placement within a Kubernetes cluster. Imagine a scenario with three nodes and three pods, each uniquely identified by their colors: blue, red, and green. The goal is to schedule the blue pod onto the blue node, the red pod onto the red node, and the green pod onto the green node.
+
+Our Kubernetes cluster is shared among multiple teams. Therefore, it is crucial to ensure that no pod from another team is accidentally scheduled on our dedicated nodes, and our pods are not deployed on nodes assigned to other teams.
+
+**Using Taints and Tolerations**
+Taints and tolerations are a powerful mechanism to control pod placement. Follow these steps to use them effectively:
+
+**Apply Taints to Nodes:**
+Taint each node with a key-value pair corresponding to its color (e.g., blue, red, or green). This marks the nodes and repels any pod that does not have a matching toleration.
+
+**Set Tolerations on Pods:**
+Configure each pod with a toleration that matches its designated node’s taint. When pods are created, Kubernetes verifies node taints and only schedules pods that have appropriate tolerations. For example, the green pod, which carries the matching toleration, will only be scheduled on the green node, and the same applies to the blue and red pods.
+
+**Key Consideration**
+
+While taints and tolerations allow pods with the proper tolerations to be scheduled on tainted nodes, they do not enforce that these pods are preferentially scheduled onto these nodes. This means that a pod (like the red pod) could potentially be scheduled on a node that lacks any specific taint if the scheduling criteria permit.
+
+**Using Node Affinity**
+Node affinity offers an additional layer of control for scheduling:
+
+**Labeling Nodes:**
+Assign each node a label that corresponds to its color (blue, red, or green).
+
+**Setting Node Selectors on Pods:**
+Configure each pod with a node selector that matches the node’s label. This enforces that pods only get scheduled on nodes that have the corresponding label, ensuring that pods land on the intended nodes.
+
+However, node affinity alone does not stop other teams' pods from being scheduled on these nodes.
+
+## Combining Taints, Tolerations, and Node Affinity
+To fully dedicate nodes to specific pods and prevent external interference, it is best to combine both strategies:
+
+**Prevent External Pod Scheduling:**
+Use taints on the nodes and matching tolerations on your pods to ensure that only the correct pods are scheduled on these nodes.
+
+**Enforce Correct Pod Placement:**
+Apply node affinity settings to ensure that pods are scheduled strictly on nodes with the appropriate labels.
+
+<img width="678" height="491" alt="Screenshot 2025-12-02 at 10 30 38 AM" src="https://github.com/user-attachments/assets/3f0fa3cd-c921-4e6f-9943-fb89f514ece8" />

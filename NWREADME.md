@@ -43,6 +43,7 @@ For example, you can list the contents of these directories with the following c
     # Display the running kubelet process showing CNI options
      ps -aux | grep kubelet
 
+# DNS in Kuberntes
 
      # List CNI plugin executables
      ls /opt/cni/bin

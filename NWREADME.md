@@ -44,6 +44,11 @@ For example, you can list the contents of these directories with the following c
      ps -aux | grep kubelet
 
 # DNS in Kuberntes
+**DNS functionality within a Kubernetes cluster**
+we explore how names are assigned to various Kubernetes objects—such as services and pods—and illustrate the mechanisms through which pods communicate over DNS.
+
+DNS resolution in Kubernetes enables seamless communication between components using service names rather than IP addresses, promoting scalability and easier management.
+
 
      # List CNI plugin executables
      ls /opt/cni/bin

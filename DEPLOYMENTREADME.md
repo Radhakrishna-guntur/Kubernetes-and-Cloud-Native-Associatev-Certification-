@@ -17,13 +17,12 @@ Additionally, if an update introduces an error, you can quickly roll back change
 
 To create the Deployment, save the above YAML content to a file (for example, **deployment-definition.yml**) and run:
 
-     kubectl create -f deployment-definition.yml
+       kubectl create -f deployment-definition.yml
 
 Once applied, you can verify the creation of your Deployment with the following commands:
 
 
 <img width="538" height="676" alt="Screenshot 2025-11-28 at 6 25 36 PM" src="https://github.com/user-attachments/assets/dff3e0c6-788c-4de5-aed8-a4a95cb8c46b" />
-
 
 ## Deployments Rolling Updates and Rollbacks
 

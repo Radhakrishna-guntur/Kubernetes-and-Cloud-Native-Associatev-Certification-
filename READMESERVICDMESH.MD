@@ -11,14 +11,19 @@ Each pod receives its own IP address, which enables direct communication. Howeve
 Kubernetes services provide a stable abstraction over a dynamic set of pods. By leveraging labels, a service can select the appropriate pods from a larger pool, ensuring consistent connectivity even when pods are terminated and recreated. The service is assigned its own IP address, enabling applications to communicate through the service rather than connecting to individual pod IPs.
 
 
-There are three primary types of Kubernetes services:
+## There are three primary types of Kubernetes services:
 
-ClusterIP
+## ClusterIP
+
 This is the default service type. It creates an internal-only service to facilitate communication between applications within the cluster.
 The image illustrates three types of Kubernetes services: NodePort, ClusterIP, and LoadBalancer, each represented with a simple diagram.
 
-NodePort
+## NodePort
+
 This service type exposes the application on a specified port on every node in the cluster. It makes the application accessible from outside the cluster, although the access is limited to the node IP addresses and the allocated port.
 
-LoadBalancer
+## LoadBalancer
+
 Supported by specific cloud providers, this service type is similar to NodePort but integrates with an external load balancer. This external component routes traffic to the application’s exposed ports on the nodes, providing a more robust solution for external access.
+
+

@@ -260,7 +260,7 @@ The Kubernetes scheduler is tasked with selecting the optimal node for a pod by 
 
 If a node does not possess sufficient resources, the scheduler bypasses it and selects an alternative node that can satisfy the pod’s resource demands.
 
-When none of the nodes meet the resource criteria, the pod remains in a pending state. Running the kubectl describe pod command in such cases may display an event message similar to:
+When none of the nodes meet the resource criteria, the pod remains in a pending state. Running the ' **kubectl describe pod** ' command in such cases may display an event message similar to:
 
             NAME           READY         STATUS              RESTARTS          AGE
             

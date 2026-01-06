@@ -270,3 +270,50 @@ When none of the nodes meet the resource criteria, the pod remains in a pending 
             Reason                     Message
             -----                      ------
            FailedScheduling           No nodes are available that match all of the following predicates:: Insufficient cpu (3).
+
+<img width="727" height="641" alt="Screenshot 2026-01-06 at 11 20 34 AM" src="https://github.com/user-attachments/assets/14073a43-a582-4f58-b085-0b2e8494cfea" />
+
+Kubernetes verifies that these requested resources are available on the node prior to scheduling the pod.
+
+A few key points about CPU values:
+
+     You can specify fractional values, such as 0.1 CPU.
+     The value 0.1 CPU can also be expressed as 100m (milli).
+     The smallest measurable unit is 1m.
+     One core of CPU is equivalent to one vCPU, as seen in most cloud providers such as AWS, GCP, and Azure, or as a hyper-thread in other systems.
+
+<img width="740" height="630" alt="Screenshot 2026-01-06 at 11 22 17 AM" src="https://github.com/user-attachments/assets/d5bda1cd-b991-4e9b-b4ca-f6e26564061d" />
+
+
+
+<img width="589" height="701" alt="Screenshot 2026-01-06 at 11 23 19 AM" src="https://github.com/user-attachments/assets/d91d63ea-1949-4a86-b83b-838890cb6c97" />
+
+
+While CPU limits restrict a container from surpassing its assigned CPU capacity by throttling, memory limits function differently. A container may temporarily exceed its set memory limit; however, if it does so consistently, the system will terminate the container with an Out Of Memory (OOM) error.
+
+
+## Default Behavior and Best Practices:
+
+By default, Kubernetes does not enforce resource requests or limits. As a consequence, a pod that lacks these settings may consume all available resources on its host node, potentially starving other pods.
+
+## CPU Resource Scenarios:
+
+1. No requests or limits set: A pod may consume all CPU resources, adversely affecting other deployments.
+2. Limits set but no requests: Kubernetes assigns the request value equal to the limit. For example, if the limit is set to 3 vCPUs, the pod is guaranteed 3 vCPUs.
+3. Both requests and limits set: A pod is guaranteed its requested amount (e.g., 1 vCPU), but it can scale up to the defined limit (e.g., 3 vCPUs) if resources permit.
+4. Requests set but no limits: The pod is guaranteed its requested CPU (e.g., 1 vCPU) and can consume any unutilized CPU cycles on the node, offering a balanced approach to resource efficiency.
+
+## Memory Resource Scenarios
+
+Memory management follows a similar concept:
+
+1. Without requests or limits: A pod may consume all available memory, potentially leading to instability.
+2. Only limits specified: Kubernetes assigns the pod’s memory request equal to its limit (e.g., 3 GB).
+3. Both requests and limits specified: The pod is guaranteed its requested memory (e.g., 1 GB) and can utilize up to the limit (e.g., 3 GB).
+4. Requests set without limits: The pod is guaranteed its requested memory; however, unlike CPU, exceeding this value may lead to the pod being terminated if system memory runs low.
+
+Always set resource requests for your pods. A pod without specified requests can overconsume resources, potentially leading to performance degradation of other pods with defined limits.
+
+<img width="720" height="671" alt="Screenshot 2026-01-06 at 11 33 52 AM" src="https://github.com/user-attachments/assets/10243f02-20de-43fe-b7bf-e0c2af9a28d8" />
+<img width="730" height="581" alt="Screenshot 2026-01-06 at 11 33 07 AM" src="https://github.com/user-attachments/assets/786f62f6-d0bc-4b45-b674-e9059870e6f3" />
+<img width="740" height="643" alt="Screenshot 2026-01-06 at 11 32 50 AM" src="https://github.com/user-attachments/assets/1012302e-b847-4369-81f1-6e3c108791fa" />

@@ -248,3 +248,25 @@ Use taints on the nodes and matching tolerations on your pods to ensure that onl
 Apply node affinity settings to ensure that pods are scheduled strictly on nodes with the appropriate labels.
 
 <img width="678" height="491" alt="Screenshot 2025-12-02 at 10 30 38 AM" src="https://github.com/user-attachments/assets/3f0fa3cd-c921-4e6f-9943-fb89f514ece8" />
+
+
+
+
+# Resource Limits
+
+In this lesson, we explore resource requirements and limits within a Kubernetes cluster. We begin with a three-node cluster architecture, where each node has a specific set of CPU and memory resources available. Every pod scheduled on a node consumes a reserved portion of these resources. For instance, a pod might require two CPUs and one unit of memory. When the pod is scheduled, it directly consumes the available resources on its host node.
+
+The Kubernetes scheduler is tasked with selecting the optimal node for a pod by comparing the pod’s resource requirements to the available capacity on each node. In the example below, the scheduler places a new pod on node two because that node meets the minimum resource criteria.
+
+If a node does not possess sufficient resources, the scheduler bypasses it and selects an alternative node that can satisfy the pod’s resource demands.
+
+When none of the nodes meet the resource criteria, the pod remains in a pending state. Running the kubectl describe pod command in such cases may display an event message similar to:
+
+            NAME           READY         STATUS              RESTARTS          AGE
+            
+            Nginx           0/1          Pending               0               7m
+            
+            Events:
+            Reason                     Message
+            -----                      ------
+           FailedScheduling           No nodes are available that match all of the following predicates:: Insufficient cpu (3).

@@ -8,3 +8,29 @@ The good news, though, is that – as this article explains – it’s easy enou
 
 ## What is a Kubernetes Network Policy?
 
+In Kubernetes, a Network Policy is a type of rule that determines how pods communicate over the network. Network Policies can control traffic flows between pods and other resources within a cluster. They can also manage traffic between the pods inside a cluster and external endpoints.
+
+Let most other configuration resources in Kubernetes, Network Policies are defined using YAML code. We’ll take a look at some examples in a bit.
+
+It’s important to note that you don’t strictly need to create a Network Policy for each pod in Kubernetes. However, without a Network Policy, Kubernetes defaults to allowing all traffic to flow into and out of a pod – which could lead to performance issues (because you may end up flooding the network with unimportant traffic and depriving workloads of sufficient bandwidth) or security challenges (due to lack of pod isolation at the network transport level).
+
+Note also that Network Policies don’t allow management of TLS traffic encryption. To handle that, you’d use a service mesh or ingress controller.
+
+## Key concepts for Kubernetes Network Policies
+
+Network Policies operate based on the following four concepts:
+
+Pod selector: The pod selector determines which pods a Kubernetes Network Policy should apply to. Selectors are typically based on pod labels; for instance, you could create a Network Policy that matches all pods labeled “database.”
+Ingress rules: Ingress traffic rules govern which types of incoming traffic are allowed. For example, you could define a Network Policy that only allows incoming traffic from a specific range of IP addresses.
+Egress rules: Egress rules determine which outgoing traffic a pod is allowed to send. Here again, you can allow traffic only to certain IP address ranges or only on certain ports, for example.
+Policy type: The policy type refers to which types of traffic you want a Network Policy to manage. You can select ingress only, egress only, or both ingress and egress.
+How do Kubernetes Network Policies work?
+
+Network Policies work using the following steps:
+
+Define a Network Policy: First, an admin creates a Network Policy. The policy should specify which pod or pods it applies to based on pod selectors, as explained above. The policy should also define ingress and/or egress rules.
+Apply the policy: Using kubectl, the admin applies the policy so that it takes effect.
+Automated enforcement: Once applied, a Network Policy is automatically enforced by Kubernetes.
+
+
+

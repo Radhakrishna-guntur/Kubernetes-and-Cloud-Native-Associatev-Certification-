@@ -237,6 +237,133 @@ Review the complete rollout history to verify all revisions and their change cau
    kubectl rollout history deployment/myapp-deployment
 
 
+
+One of Kubernetes's killer features is that it offers a flexible way to deploy applications. Admins can choose from a variety of deployment strategies, each of which offers a different approach to application lifecycle management. Depending on factors like application availability requirements or how carefully you want to be able to test a new deployment before entrusting mission-critical workloads to it, one Kubernetes deployment strategy may be a better fit than another.
+
+To provide guidance on how to select the best deployment strategy for a given workload, this article compares eight popular Kubernetes deployment techniques, explaining their pros and cons. It also offers tips on optimizing your Kubernetes deployment strategy no matter which type or types of deployments you choose.
+
+# What is a Kubernetes deployment strategy?
+
+A Kubernetes deployment strategy is the configuration that manages how Kubernetes runs and manages an application. Deployment strategies are typically defined in YAML files, which describe how Kubernetes should deploy the initial pods and containers associated with an app, as well as how it should manage updates over the course of the application’s lifecycle.
+
+Having different deployment strategy options is part of what makes Kubernetes so powerful and flexible. Depending on what an application does, you may need to manage its deployment in a specific way.
+
+For example, with some applications, it’s possible to run multiple versions of the app at the same time within the same Kubernetes cluster. In that case, you could use a deployment strategy that updates application instances one by one. But this typically wouldn’t work if all application instances need to connect to a shared database or maintain a shared global state. An appropriate deployment strategy for that scenario would require updating all application instances at the same time, in order to maintain consistency between versions.
+
+## Top 5 Kubernetes deployment strategies
+To illustrate what Kubernetes deployment strategies look like in practice, here are eight examples of popular deployment patterns.
+
+**1. Recreate deployment**
+
+A recreate deployment tells Kubernetes to delete all existing instances of a pod before creating a new one. Recreate deployment strategies are useful for situations where you need all application instances to run the same version at all times.
+
+To configure a recreate deployment, include a spec like the following in your deployment configuration:
+
+spec:
+  replicas: 3
+  strategy:
+	type: Recreate
+This creates a deployment with three pod replicas and uses the recreate deployment strategy to maintain a consistent version across each replica.
+
+**2. Rolling deployment**
+
+A rolling deployment (which is the default deployment strategy that Kubernetes uses if you don’t specify an alternative) manages pod updates by applying them incrementally to each pod instance. In other words, it works by restarting Kubernetes pods one by one.
+
+Rolling updates are a useful deployment strategy when it’s important to avoid downtime. Since this approach updates pod instances incrementally, it ensures that while one pod instance is being updated, other instances remain available to handle requests.
+
+The following spec configures a rolling deployment strategy:
+
+spec:
+  replicas: 3
+  strategy:
+	type: RollingUpdate
+	rollingUpdate:
+  	maxUnavailable: 1    	# Maximum number of Pods that can be unavailable during the update
+  	maxSurge: 1          	# Maximum number of Pods that can be created over the desired number
+
+**3. Blue/green deployment**
+
+In a blue/green deployment strategy, you maintain two distinct Kubernetes deployments – a blue deployment and a green one – and switch traffic between them. The advantage of this approach is that it allows you to test one version of your deployment and confirm that it works properly before directing traffic to it.
+
+To implement a blue/green deployment, first create two Kubernetes deployments. Use the deployment metadata field to apply a unique label to each one.
+
+Then, define a Kubernetes service that specifies which of the two Kubernetes deployments should receive requests. For example, the following service sends traffic to the blue deployment by matching the label “blue”:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  selector:
+	app: my-app
+	color: blue  # Switch this to "green" during the cutover
+  ports:
+  - protocol: TCP
+	port: 80
+	targetPort: 80
+  type: ClusterIP
+As noted in the comment within the service definition, you can modify the selector to “green” in order to switch traffic to your other deployment.
+
+Blue/green deployments minimize the risk of downtime because they allow you to vet a new deployment fully before using it to handle production traffic. A downside, however, is that blue/green deployments require you to run two complete instances of your application at the same time. This is not an efficient use of resources, since only one of the instances is handling traffic.
+
+**4. Canary deployment**
+
+A canary deployment strategy switches traffic between distinct deployments gradually. It’s similar to a blue/green strategy in that it requires two different deployments. But whereas a blue/green deployment cuts traffic over from one deployment to the other all at once, the canary method directs some requests to one deployment while sending others to the other deployment.
+
+The advantage of this approach is that it allows you to detect problems with one of the deployments before they impact all users. It’s called a “canary” deployment because it’s analogous to using canaries in coal mines to detect the buildup of toxic gases before they reach a level that would harm humans, since canaries are especially sensitive to gases like carbon monoxide.
+
+To set up a canary deployment, first create two deployments for your application. The number of pod replicas for each deployment should reflect which percentage of traffic you want the deployment to handle. For instance, if you want one deployment to receive 60 percent of your traffic and the other to receive 40 percent, create 6 replicas in the first deployment and 4 in the second. Both deployments should match the same application label.
+
+Then, create a service that directs traffic to the matching application based on the deployment metadata. For example:
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+spec:
+  selector:
+	app: my-app
+  ports:
+  - protocol: TCP
+	port: 80
+	targetPort: 80
+  type: ClusterIP
+
+To modify the balance between traffic over time in order to switch traffic gradually from one deployment to the other, scale the replicas within each deployment accordingly using the kubectl scale deployment command.
+
+**5. A/B testing deployment**
+
+In an A/B testing deployment, you run two distinct deployments and route traffic between them based on request type or user characteristics.
+
+For example, imagine you want to distinguish between requests from “testing” users and requests from “production” users. You could do this by differentiating between user types in request headers and routing requests on this basis. Requests with the header end-user: testing would go to one deployment, while those with end-user: production would route to another.
+
+To implement an A/B testing deployment strategy, first create two deployments. Then, install a service mesh or ingress controller, such as Istio, and configure it with a routing rule that selects a deployment based on header strings.
+
+For instance, the following Istio virtual service (which targets the app my-app based on the deployment metadata) sends requests with testing in the header to one deployment, while routing all others to the other deployment:
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: my-app
+spec:
+  hosts:
+  - my-app
+  http:
+  - match:
+	- headers:
+    	    end-user:
+      	       exact: testing     	# A/B testing condition
+	route:
+	- destination:
+    	  host: my-app
+    	  subset: v2
+  - route:
+	- destination:
+    	  host: my-app
+    	  subset: v1
+
+
+
 ## Conclusion
 
 In this lesson, you have learned to:
@@ -249,6 +376,10 @@ In this lesson, you have learned to:
    Roll back to a previous revision using kubectl rollout undo.
  
  This approach ensures that your updates are applied smoothly and, if issues arise, can be quickly reverted to maintain application availability.
+
+ Reference Links:
+ https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+ https://www.groundcover.com/blog/kubernetes-deployment-strategies
 
 
 

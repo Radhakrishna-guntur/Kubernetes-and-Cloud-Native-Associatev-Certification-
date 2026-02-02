@@ -364,6 +364,87 @@ spec:
 
 
 
+# Choosing the right deployment strategy by use case
+
+The main consideration for deciding which deployment strategy to adopt is the type of use case you need to support. Here’s a look at common use cases and the best deployment strategies for each one.
+
+**Stateless applications**
+For stateless applications, a simple rolling deployment usually makes the most sense. If there is no application, it’s not typically important to keep pod instances in sync, so you can update them one by one without causing problems.
+
+**Stateful applications**
+For most stateful applications, a recreate deployment strategy works best. Recreate deployments ensure that application versions remain consistent across all instances, helping to keep state in sync.
+
+Note as well that typically, you’d use a StatefulSet instead of a deployment to run a stateful application. (For details, check out our article on Kubernetes StatefulSet vs deployment.) But you can apply most types of deployment strategies to StatefulSets as well as to deployments.
+
+**High-traffic applications**
+
+For applications that receive a lot of traffic on a continuous basis, a canary deployment or one of its variants (like a best-effort controlled rollout or a ramped slow rollout) is usually the best fit. These methods make it possible to route traffic between multiple deployments, which in turn helps to balance load and ensure that no one deployment becomes overwhelmed.
+
+**Mission-critical and zero-downtime apps**
+
+For use cases where you can’t tolerate any downtime, consider a blue/green deployment. This approach allows you to validate a new deployment fully before sending traffic to it.
+
+A shadow deployment could also be a good choice for this use case. It would allow you to real-user perform testing on a new deployment before directing requests to it.
+
+A/B testing deployment strategies may also work well for certain mission-critical apps, especially if only certain users or requests are critical. In that case, you can send the high-value requests to one deployment that you’ve carefully tested, while routing less critical ones to another deployment.
+
+**Batch processing and background jobs**
+
+For use cases that involve processing data in batches or running background jobs, a simple recreate or rollout deployment strategy typically works well. More complex and advanced deployment strategies aren’t usually necessary for these use cases because you usually don’t need to worry as much about the potential for downtime or running multiple versions of an application at the same time.
+
+# Factors to consider when selecting a deployment strategy
+
+Factor	Description	Deployment strategies to consider
+
+Downtime tolerance	Degree to which an application can tolerate downtime risk.	Recreate, blue/green, canary.
+
+Traffic flow and load management	Ability to balance traffic or load across deployments.	Canary, best-effort controlled rollout.
+
+Failover, rollback, and reversal	Opportunity to revert to an application's previous version.	Blue/green, canary.
+
+Security and compliance	Ability to manage specific security or compliance risks.	Recreate, A/B testing.
+
+Scalability and auto-healing	Ability to scale pods and fix failed replicas automatically.	Canary deployments with replicas.
+
+Beyond aligning deployment strategies with use cases, it’s also important to consider the following factors:
+
+Deployment downtime tolerance: The less downtime you can accept for a workload, the more important it is to use a low-risk deployment strategy, like rolling or blue/green Kubernetes deployments.
+
+Traffic flow and load management: If you need fine-grained control over traffic flow and load balancing, consider an A/B testing or controlled rollout deployment, which allows you to route traffic based on predefined rules.
+
+Failover, rollback, and reversal mechanisms: If it’s important to be able to revert to a previous version of a deployment, use either a blue/green or canary deployment method. These approaches make it possible to switch back to one deployment in the event that a newer deployment turns out to be buggy.
+
+Security and compliance considerations: Some Kubernetes deployments are subject to specific security and compliance requirements. For instance, if you need to ensure that security patches roll out to all application instances (to avoid leaving some vulnerable instances), you’d want a recreate deployment method. Or, if you need to route requests for users based in a certain area to a specific deployment to meet compliance rules that apply to those users, you could use an A/B testing deployment strategy.
+
+Scalability and auto-healing capabilities: Canary deployments are useful because they provide control over deployment scalability. They can also offer some auto-healing capabilities because Kubernetes will automatically attempt to maintain the number of replicas specified for each deployment – so if some replicas fail, Kubernetes can self-heal by restoring them.
+
+
+# Best practices for a seamless Kubernetes deployment
+
+No matter which deployment strategy you choose, the following best practices can help minimize risk and simplify administration:
+
+Prefer simplicity: Some deployment strategies (like recreate and rolling Kubernetes deployments) are much simpler than others (like best-effort controlled rollouts). In general, simpler is better. Don’t implement a complex deployment strategy, or one that requires the use of additional tools (like Istio or Argo) unless you need the special capabilities it provides.
+
+Test deployments: Prior to entrusting production traffic to a deployment, it’s a best practice to test it first. You can do this using synthetic requests, or you can direct real user requests to a deployment via a method like shadow deployments.
+
+Monitor and observe Kubernetes deployments: To detect issues with a deployment, it’s critical to monitor and observe all application instances. Methods like blue/green and canary deployments are only useful if you have the monitoring and observability data necessary to detect problems with one deployment and route traffic appropriately.
+
+Consider resource overhead: Deployment strategies that require you to maintain multiple Kubernetes deployments at the same time create more resource overhead (because more deployments require more resources to run). This can lead to poorer performance because Kubernetes cluster resources are tied up with redundant deployments. For this reason, it’s important to evaluate how many spare resources your Kubernetes cluster has and choose a deployment method accordingly.
+
+Optimizing and monitoring Kubernetes deployments with groundcover
+When it comes to monitoring Kubernetes deployments and troubleshooting problems, groundcover as you covered. Using hyper-efficient eBPF-based observability, groundcover clues you in - in real time - to deployment performance issues like dropped requests or high latency rates. We also continuously track CPU, memory, and other performance metrics, so you’ll know right away if any of your Kubernetes deployments are at risk of becoming overwhelmed.
+
+
+We can’t tell you exactly which deployment strategy is best for a given workload. But we can give you the observability data you need to make an informed decision about Kubernetes deployment strategies.
+
+**A balanced approach to Kubernetes deployment**
+
+Ultimately, Kubernetes deployment strategies boil down to balancing performance and control on the one hand with risk and complexity on the other. If you just want to deploy an application simply and quickly, Kubernetes lets you do that – although simple deployment methods are sometimes more risky.
+
+You can also opt for more complex and fine-tuned deployment strategies that – like a complex chess move – require more expertise to carry out, but that can pay off in the long run by delivering a better balance between risk and performance.
+
+
+
 ## Conclusion
 
 In this lesson, you have learned to:

@@ -1,0 +1,11 @@
+# Kubernetes Network Policy: Benefits, Use Cases & Best Practices:
+
+Find out how to easily set up Network Policies that control how traffic flows within your cluster, and how the cluster interfaces with external endpoints.Imagine you’re out in public, trying to have a conversation with a friend. At the same time, several random strangers are also shouting things at you. Not only can you not hear what your friend is trying to say, but you may also struggle to express yourself because your words are drowned out by all of the noise from other people.
+
+This is a little like what happens in a Kubernetes cluster that lacks Network Policies. When you don’t configure a Kubernetes Network Policy for each of your pods, you may end up with lots of random network traffic flowing between pods and other endpoints. In a best case, this could degrade performance by flooding the network with unnecessary traffic. In a worse case, it may lead to security issues by making it easier for attackers who compromise one pod to spread their breach to others using the network.
+
+The good news, though, is that – as this article explains – it’s easy enough to set up Network Policies that control how traffic flows within your cluster, as well as how the cluster interfaces with external endpoints. 
+
+## What is a Kubernetes Network Policy?
+
+

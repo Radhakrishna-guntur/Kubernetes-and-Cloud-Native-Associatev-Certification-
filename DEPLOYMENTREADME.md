@@ -255,6 +255,8 @@ To illustrate what Kubernetes deployment strategies look like in practice, here 
 
 **1. Recreate deployment**
 
+![1](https://github.com/user-attachments/assets/b8c85520-c85a-4399-b47e-29aa3ec02e29)
+
 A recreate deployment tells Kubernetes to delete all existing instances of a pod before creating a new one. Recreate deployment strategies are useful for situations where you need all application instances to run the same version at all times.
 
 To configure a recreate deployment, include a spec like the following in your deployment configuration:
@@ -283,6 +285,9 @@ spec:
 
 **3. Blue/green deployment**
 
+<img width="1477" height="912" alt="image" src="https://github.com/user-attachments/assets/c1347b84-596e-41d6-9e75-e9218692830d" />
+
+
 In a blue/green deployment strategy, you maintain two distinct Kubernetes deployments – a blue deployment and a green one – and switch traffic between them. The advantage of this approach is that it allows you to test one version of your deployment and confirm that it works properly before directing traffic to it.
 
 To implement a blue/green deployment, first create two Kubernetes deployments. Use the deployment metadata field to apply a unique label to each one.
@@ -307,6 +312,9 @@ As noted in the comment within the service definition, you can modify the select
 Blue/green deployments minimize the risk of downtime because they allow you to vet a new deployment fully before using it to handle production traffic. A downside, however, is that blue/green deployments require you to run two complete instances of your application at the same time. This is not an efficient use of resources, since only one of the instances is handling traffic.
 
 **4. Canary deployment**
+
+<img width="1477" height="912" alt="image" src="https://github.com/user-attachments/assets/20e4065d-4482-4c6e-93d5-0cac6967db53" />
+
 
 A canary deployment strategy switches traffic between distinct deployments gradually. It’s similar to a blue/green strategy in that it requires two different deployments. But whereas a blue/green deployment cuts traffic over from one deployment to the other all at once, the canary method directs some requests to one deployment while sending others to the other deployment.
 
@@ -431,8 +439,12 @@ Monitor and observe Kubernetes deployments: To detect issues with a deployment, 
 
 Consider resource overhead: Deployment strategies that require you to maintain multiple Kubernetes deployments at the same time create more resource overhead (because more deployments require more resources to run). This can lead to poorer performance because Kubernetes cluster resources are tied up with redundant deployments. For this reason, it’s important to evaluate how many spare resources your Kubernetes cluster has and choose a deployment method accordingly.
 
-Optimizing and monitoring Kubernetes deployments with groundcover
+## Optimizing and monitoring Kubernetes deployments with groundcover
+
 When it comes to monitoring Kubernetes deployments and troubleshooting problems, groundcover as you covered. Using hyper-efficient eBPF-based observability, groundcover clues you in - in real time - to deployment performance issues like dropped requests or high latency rates. We also continuously track CPU, memory, and other performance metrics, so you’ll know right away if any of your Kubernetes deployments are at risk of becoming overwhelmed.
+
+
+<img width="1476" height="912" alt="image" src="https://github.com/user-attachments/assets/a0f0380d-480a-4935-b390-6639afd352ac" />
 
 
 We can’t tell you exactly which deployment strategy is best for a given workload. But we can give you the observability data you need to make an informed decision about Kubernetes deployment strategies.
@@ -458,8 +470,11 @@ In this lesson, you have learned to:
  
  This approach ensures that your updates are applied smoothly and, if issues arise, can be quickly reverted to maintain application availability.
 
- Reference Links:
+**Reference Links:**
+ 
  https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
+ 
  https://www.groundcover.com/blog/kubernetes-deployment-strategies
 
 

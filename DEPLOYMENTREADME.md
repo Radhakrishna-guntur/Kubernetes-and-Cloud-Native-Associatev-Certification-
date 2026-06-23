@@ -1,6 +1,6 @@
 ## Kubernetes Resources
 
-# Deployments
+# Deployments:
 
 Kubernetes Deployments build on foundational concepts: Pods encapsulate individual application instances, while ReplicaSets (or ReplicationControllers) manage multiple Pods.
 A Deployment is a higher-level construct that not only creates a ReplicaSet but also orchestrates rolling updates, rollbacks, and pause/resume operations.
@@ -24,7 +24,7 @@ Once applied, you can verify the creation of your Deployment with the following 
 
 <img width="538" height="676" alt="Screenshot 2025-11-28 at 6 25 36 PM" src="https://github.com/user-attachments/assets/dff3e0c6-788c-4de5-aed8-a4a95cb8c46b" />
 
-## Deployments Rolling Updates and Rollbacks
+## Deployments Rolling Updates and Rollbacks:
 
 In this article, you'll learn how to perform **rolling updates, roll back changes, and effectively manage deployment revisions**.
 

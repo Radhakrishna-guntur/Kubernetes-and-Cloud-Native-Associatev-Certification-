@@ -1,6 +1,6 @@
-## Kubernetes Resources
+# Kubernetes Resources
 
-# Deployments:
+## Deployments:
 
 Kubernetes Deployments build on foundational concepts: Pods encapsulate individual application instances, while ReplicaSets (or ReplicationControllers) manage multiple Pods.
 A Deployment is a higher-level construct that not only creates a ReplicaSet but also orchestrates rolling updates, rollbacks, and pause/resume operations.

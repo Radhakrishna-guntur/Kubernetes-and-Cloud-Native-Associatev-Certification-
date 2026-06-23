@@ -115,7 +115,8 @@ Example output:
     1          <none>
 Since the change cause was not recorded initially, the change cause column is empty.
 
-## Recording the Change Cause
+## Recording the Change Cause:
+
 To capture the reason behind changes, delete the existing deployment and re-create it using the --record option:
 
 **Delete the deployment and wait until all pods terminate:**
@@ -152,11 +153,11 @@ The output should now show an entry with a recorded change cause:
 ## Using kubectl set image for a Different Update Method
 Another approach to update the container image is by using the kubectl set image command. For instance, to update the container image to **nginx:1.18-perl**, execute:
 
-   kubectl set image deployment myapp-deployment nginx=nginx:1.18-perl --record
+   **kubectl set image deployment myapp-deployment nginx=nginx:1.18-perl --record**
 
 Then, verify the rollout status:
 
-   kubectl rollout status deployment/myapp-deployment
+  **kubectl rollout status deployment/myapp-deployment**
    
 The status messages will indicate that the old replicas for version 1.18 are being replaced by new replicas running version 1.18-perl. Confirm the updated revision history with:
 
@@ -186,7 +187,8 @@ Once complete, confirm the current deployment configuration:
 
 Note that while the rollout history might show an updated revision number, the state will match the previous, stable revision.
 
-## Simulating a Failed Rollout
+## Simulating a Failed Rollout:
+
 To demonstrate how Kubernetes handles a failed rollout, modify the deployment to use a non-existent image. 
 Start by editing the deployment:
 

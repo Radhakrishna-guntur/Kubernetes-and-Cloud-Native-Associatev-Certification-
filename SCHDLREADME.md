@@ -1,6 +1,7 @@
 # Scheduling
 
-## Labels and Selectors
+## Labels and Selectors:
+
 Labels and selectors provide a standard method to group and filter items based on various criteria. Think of it like sorting species by attributes such as class (mammal, bird, etc.), domestication status, or color. Whether you want to list all green animals or specifically all green birds, labels let you attach key-value pairs to each item, while selectors help retrieve items that meet your criteria.
 
 This concept is applied widely—from tagging YouTube videos or blog posts, to using filters that sort products in an online store.
@@ -9,6 +10,8 @@ In Kubernetes, labels and selectors are essential for managing a cluster filled 
 
 
 <img width="1222" height="685" alt="Screenshot 2025-12-02 at 10 06 46 AM" src="https://github.com/user-attachments/assets/4584e0ff-7835-4f4f-9fc3-88ef1d29d924" />
+
+
 
 For every Kubernetes object, you attach labels as needed (for example, app or function) and then use selectors to filter the objects. For instance, if you want to filter objects where the label app equals App1, your selector would look like this:
 
@@ -24,7 +27,7 @@ In a Pod definition file, labels are defined under the metadata section. Below i
 
 When working with ReplicaSets to manage multiple Pods, you label the Pod definition and then specify a selector in the ReplicaSet to group the desired Pods. It’s crucial that the selector in the ReplicaSet specification matches the labels on the Pods exactly.
 
-Note: Only the labels on the Pod template are used for selection; labels on the ReplicaSet itself are not considered.
+**Note:** Only the labels on the Pod template are used for selection; labels on the ReplicaSet itself are not considered.
 
 <img width="727" height="635" alt="Screenshot 2025-12-02 at 10 10 10 AM" src="https://github.com/user-attachments/assets/6f1a14b5-e2a7-435b-b2f0-7527655c0447" />
 
@@ -42,6 +45,7 @@ For example, consider the following ReplicaSet definition that includes an annot
 <img width="723" height="678" alt="Screenshot 2025-12-02 at 10 11 15 AM" src="https://github.com/user-attachments/assets/eb309d76-78b2-4e01-9047-32374521c9f9" />
 
 **Summary**
+
 Through the careful use of labels, selectors, and annotations, Kubernetes offers a powerful framework to manage and organize vast numbers of objects effectively. This flexible mechanism improves resource management and simplifies querying, ensuring smooth operations in complex environments.
 
 |
@@ -60,7 +64,7 @@ Pods without the appropriate toleration will be repelled by taints, while those 
 
 **Translating the Analogy to Kubernetes**
 
-In Kubernetes:
+**In Kubernetes:**
 
    **Nodes** act as the "person" that is tainted.
    **Pods** act as the "bugs" that may be scheduled based on their tolerations.
@@ -90,6 +94,7 @@ There are three taint effects available:
 
 <img width="707" height="594" alt="Screenshot 2025-12-02 at 10 18 46 AM" src="https://github.com/user-attachments/assets/234f2034-ae42-4ad8-99d9-230df18a0f29" />
 
+
 Special Case: NoExecute Effect
 Let’s consider the NoExecute taint effect in a dedicated node scenario:
 
@@ -105,6 +110,7 @@ Moreover, while master nodes are fully capable of running pods, they are usually
 This command displays the taint information that ensures the stability and performance of cluster management services.
 
 ## Conclusion
+
 In this guide, we have:
 
    Explained how taints and tolerations work in Kubernetes using a relatable analogy.

@@ -49,7 +49,8 @@ To view the deployment's revision history, use:
 
    kubectl rollout history deployment/myapp-deployment
 
-## Deployment Strategies
+
+# Deployment Strategies
 
 There are two primary deployment strategies to consider when updating your application:
 

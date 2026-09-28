@@ -5,12 +5,12 @@ Demonstration and Practice Tests for KCNA Certification
 
 KCNA exam utilizes a multiple-choice format.
 
-The exam objectives are comprehensive, covering:
+**The exam objectives are comprehensive, covering:**
 
-Fundamentals of cloud native computing
+1.Fundamentals of cloud native computing
 
-Core Kubernetes concepts and resources
+2.Core Kubernetes concepts and resources
 
-Scheduling, security, networking, and storage
+3.Scheduling, security, networking, and storage
 
-Service mesh, observability, and GitOps practices
+4.Service mesh, observability, and GitOps practices

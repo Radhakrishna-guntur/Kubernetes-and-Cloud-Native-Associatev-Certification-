@@ -46,7 +46,6 @@ The diagram below demonstrates a multi-container pod configuration:
 <img width="958" height="458" alt="Screenshot 2025-11-28 at 11 11 16 AM" src="https://github.com/user-attachments/assets/19a2f890-458c-48b9-a9d0-923cb904e49e" />
 
 
-
 Manual configurations for linking containers in Docker can lead to significant operational overhead. 
 Pods in Kubernetes abstract these complexities, offering streamlined management and deployment.
 
@@ -152,7 +151,6 @@ The output will resemble:
 Here, each pod is assigned its own internal IP address (in this case, 172.17.0.3), which enables network communications within the cluster.
 
 
-
 # Pods with YAML
 
 Hello, and welcome to this tutorial on creating a Pod using a YAML-based configuration file. In this guide, you will learn how to write and apply YAML files specifically tailored for Kubernetes. Kubernetes leverages YAML files to create various objects like Pods, ReplicaSets, Deployments, and Services. Each definition file adheres to a common structure containing four top-level fields: **apiVersion, kind, metadata, and spec.**
@@ -182,6 +180,7 @@ Below is a complete example of defining a Pod using YAML:
 **In this snippet:**
 
 **name** uniquely identifies the Pod.
+
 **labels** are key-value pairs used to categorize and manage Pods based on roles such as front-end, back-end, or database.
 
 The **containers** key defines a list of container specifications.
@@ -204,13 +203,10 @@ To verify that your Pod is running, use:
 
 
 
-
-
 **Conclusion**
 
 Pods are fundamental to Kubernetes, encapsulating containers and simplifying scaling, deployment, and management. 
-Whether running a single container or a multi-container setup, the pod abstraction provides a robust foundation for building scalable, 
-resilient applications on your Kubernetes cluster.
+Whether running a single container or a multi-container setup, the pod abstraction provides a robust foundation for building scalable, resilient applications on your Kubernetes cluster.
 
 In summary, when creating a YAML file for Kubernetes, always include the four top-level properties:
 
